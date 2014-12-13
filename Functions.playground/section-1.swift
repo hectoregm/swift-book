@@ -125,3 +125,62 @@ var someInt = 3
 var anotherInt = 107
 swapTwoInts(&someInt, &anotherInt)
 println("someInt is now \(someInt), and anotherInt is now \(anotherInt)")
+
+// Function Types
+
+func addTwoInts(a: Int, b: Int) -> Int {
+    return a + b
+}
+func multiplyTwoInts(a: Int, b: Int) -> Int {
+    return a * b
+}
+
+func printHelloWorld() {
+    println("hello, world")
+}
+
+
+var mathFunction: (Int, Int) -> Int = addTwoInts
+println("Result: \(mathFunction(2, 3))")
+mathFunction = multiplyTwoInts
+println("Result: \(mathFunction(2, 3))")
+let anotherMathFunction = addTwoInts
+
+func printMathResult(mathFunction: (Int, Int) -> Int, a: Int, b: Int) {
+    println("Result: \(mathFunction(a, b))")
+}
+printMathResult(addTwoInts, 3, 5)
+
+func stepForward(input: Int) -> Int {
+    return input + 1
+}
+func stepBackward(input: Int) -> Int {
+    return input - 1
+}
+
+func chooseStepFunction(backwards: Bool) -> (Int) -> Int {
+    return backwards ? stepBackward : stepForward
+}
+var currentValue = 3
+var moveNearerToZero = chooseStepFunction(currentValue > 0)
+println("Counting to zero:")
+while currentValue != 0 {
+    println("\(currentValue)... ")
+    currentValue = moveNearerToZero(currentValue)
+}
+println("zero!")
+
+// Nested Functions
+
+func chooseStepFunctionTakeTwo(backwards: Bool) -> (Int) -> Int {
+    func stepForward(input: Int) -> Int { return input + 1 }
+    func stepBackward(input: Int) -> Int { return input - 1 }
+    return backwards ? stepBackward : stepForward
+}
+currentValue = -4
+moveNearerToZero = chooseStepFunctionTakeTwo(currentValue > 0)
+while currentValue != 0 {
+    println("\(currentValue)... ")
+    currentValue = moveNearerToZero(currentValue)
+}
+println("zero!")
