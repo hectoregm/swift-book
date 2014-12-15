@@ -68,3 +68,73 @@ let fourByFiveByTwo = Cuboid(width: 4.0, height: 5.0, depth: 2.0)
 println("the volume of fourByFiveByTwo is \(fourByFiveByTwo.volume)")
 
 // Property Observers
+
+class StepCounter {
+    var totalSteps: Int = 0 {
+        willSet(newTotalSteps) {
+            println("About to set totalSteps to \(newTotalSteps)")
+        }
+        didSet {
+            if totalSteps > oldValue {
+                println("Added \(totalSteps - oldValue) steps")
+            }
+        }
+    }
+}
+let stepCounter = StepCounter()
+stepCounter.totalSteps = 200
+stepCounter.totalSteps = 360
+stepCounter.totalSteps = 896
+
+// Global and Local Variables
+
+// Type Properties
+
+struct SomeStructure {
+    static var storeTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 10
+    }
+}
+
+enum SomeEnumeration {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 15
+    }
+}
+
+class SomeClass {
+    class var computedTypeProperty: Int {
+        return 20
+    }
+}
+println(SomeClass.computedTypeProperty)
+println(SomeStructure.storeTypeProperty)
+println(SomeStructure.computedTypeProperty)
+
+struct AudioChannel {
+    static let thresholdLevel = 10
+    static var maxInputLevelForAllChannels = 0
+    var currentLevel: Int = 0 {
+        didSet {
+            if currentLevel > AudioChannel.thresholdLevel {
+                // cap the new audio level to the threshold level
+                currentLevel = AudioChannel.thresholdLevel
+            }
+            if currentLevel > AudioChannel.maxInputLevelForAllChannels {
+                // store this as the new overall maximum input level
+                AudioChannel.maxInputLevelForAllChannels = currentLevel
+            }
+        }
+    }
+}
+
+var leftChannel = AudioChannel()
+var rightChannel = AudioChannel()
+leftChannel.currentLevel = 7
+println(leftChannel.currentLevel)
+println(AudioChannel.maxInputLevelForAllChannels)
+rightChannel.currentLevel = 11
+println(rightChannel.currentLevel)
+println(AudioChannel.maxInputLevelForAllChannels)
