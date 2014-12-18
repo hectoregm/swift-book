@@ -35,3 +35,32 @@ println("Tandem: \(tandem.description)")
 
 // Overriding
 
+class Train: Vehicle {
+    override func makeNoise() {
+        println("Choo Choo")
+    }
+}
+let train = Train()
+train.makeNoise()
+
+class Car: Vehicle {
+    var gear = 1
+    override var description: String {
+        return super.description + " in gear \(gear)"
+    }
+}
+let car = Car()
+car.currentSpeed = 25.0
+car.gear = 3
+println("Car: \(car.description)")
+
+class AutomaticCar: Car {
+    override var currentSpeed: Double {
+        didSet {
+            gear = Int(currentSpeed / 10.0) + 1
+        }
+    }
+}
+let automatic = AutomaticCar()
+automatic.currentSpeed = 35.0
+println("AutomaticCar: \(automatic.description)")
