@@ -58,12 +58,12 @@ cheeseQuestion.response = "Yes, I do like cheese."
 
 // Default Initializers
 
-class ShoppingListItem {
+class ShoppingListItem2 {
     var name: String?
     var quantity = 1
     var purchased = false
 }
-var item = ShoppingListItem()
+var item = ShoppingListItem2()
 
 struct Size {
     var width = 0.0, height = 0.0
@@ -139,3 +139,27 @@ class RecipeIngredient: Food {
 let oneMysteryItem = RecipeIngredient()
 let oneBacon = RecipeIngredient(name: "Bacon")
 let sixEggs = RecipeIngredient(name: "Eggs", quantity: 6)
+
+class ShoppingListItem: RecipeIngredient {
+    var purchased = false
+    var description: String {
+        var output = "\(quantity) x \(name)"
+        output += purchased ? " ✔" : " ✘"
+        return output
+    }
+}
+
+var breakfastList = [
+    ShoppingListItem(),
+    ShoppingListItem(name: "Bacon"),
+    ShoppingListItem(name: "Eggs", quantity: 6)
+]
+
+breakfastList[0].name = "Orange juice"
+breakfastList[0].purchased = true
+for item in breakfastList {
+    println(item.description)
+}
+
+// Failable Initializers
+
