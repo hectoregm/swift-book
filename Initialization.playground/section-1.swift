@@ -163,3 +163,143 @@ for item in breakfastList {
 
 // Failable Initializers
 
+struct Animal {
+    let species: String
+    init?(species: String) {
+        if species.isEmpty { return nil }
+        self.species = species
+    }
+}
+let someCreature = Animal(species: "Giraffe")
+if let giraffe = someCreature {
+    println("An animal was initialized with a species of \(giraffe.species)")
+}
+
+let anonymousCreature = Animal(species: "")
+if anonymousCreature == nil {
+    println("The anonymous creature could not be initialized")
+}
+
+enum TemperatureUnit {
+    case Kelvin, Celsius, Fahrenheit
+    init?(symbol: Character) {
+        switch symbol {
+        case "K":
+            self = .Kelvin
+        case "C":
+            self = .Celsius
+        case "F":
+            self = .Fahrenheit
+        default:
+            return nil
+        }
+    }
+}
+let fahrenheitUnit = TemperatureUnit(symbol: "F")
+if fahrenheitUnit != nil {
+    println("This is a defined temperature unit, so initialization succeeded.")
+}
+
+let unknownUnit = TemperatureUnit(symbol: "X")
+if unknownUnit == nil {
+    println("This is not a defined temperature unit, so initialization failed.")
+}
+
+enum TemperatureUnitTakeTwo: Character {
+    case Kelvin = "K", Celsius = "C", Fahrenheit = "F"
+}
+
+let fahrenheitUnit2 = TemperatureUnitTakeTwo(rawValue: "F")
+if fahrenheitUnit2 != nil {
+    println("This is a defined temperature unit, so initialization succeeded.")
+}
+let unknownUnit2 = TemperatureUnitTakeTwo(rawValue: "X")
+if unknownUnit2 == nil {
+    println("This is not a defined temperature unit, so initialization failed.")
+}
+
+class Product {
+    let name: String!
+    init?(name: String) {
+        if name.isEmpty { return nil }
+        self.name = name
+    }
+}
+
+if let bowTie = Product(name: "bow tie") {
+    println("The product's name is \(bowTie.name)")
+}
+
+class CartItem: Product {
+    let quantity: Int!
+    init?(name: String, quantity: Int) {
+        super.init(name: name)
+        if quantity < 1 { return nil }
+        self.quantity = quantity
+    }
+}
+
+if let twoSocks = CartItem(name: "sock", quantity: 2) {
+    println("Item: \(twoSocks.name), quantity: \(twoSocks.quantity)")
+}
+
+if let zeroShirts = CartItem(name: "shirt", quantity: 0) {
+    println("Item: \(zeroShirts.name), quantity: \(zeroShirts.quantity)")
+} else {
+    println("Unable to initialize zero shirts")
+}
+
+if let oneUnnamed = CartItem(name: "", quantity: 1) {
+    println("Item: \(oneUnnamed.name), quantity: \(oneUnnamed.quantity)")
+} else {
+    println("Unable to initialize one unnamed product")
+}
+
+class Document {
+    var name: String?
+    init() {}
+    init?(name: String) {
+        if name.isEmpty { return nil }
+        self.name = name
+    }
+}
+
+class AutomaticallyNamedDocument: Document {
+    override init() {
+        super.init()
+        self.name = "[Untitlted]"
+    }
+    
+    override init(name: String) {
+        super.init()
+        if name.isEmpty {
+            self.name = "[Untitled]"
+        } else {
+            self.name = name
+        }
+    }
+}
+
+// Setting a Default Property Value with a Closure or Function
+
+struct Checkerboard {
+    let boardColors: [Bool] = {
+        var temporaryBoard = [Bool]()
+        var isBlack = false
+        for i in 1...10 {
+            for j in 1...10 {
+                temporaryBoard.append(isBlack)
+                isBlack = !isBlack
+            }
+            isBlack = !isBlack
+        }
+        return temporaryBoard
+    }()
+    
+    func squareIsBlackAtRow(row: Int, column: Int) -> Bool {
+        return boardColors[(row*10) + column]
+    }
+}
+let board = Checkerboard()
+println(board.squareIsBlackAtRow(0, column: 1))
+println(board.squareIsBlackAtRow(9, column: 9))
