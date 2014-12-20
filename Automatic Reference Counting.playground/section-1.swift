@@ -16,7 +16,7 @@ class Person {
 class Apartment {
     let number: Int
     init(number: Int) { self.number = number }
-    var tenant: Person?
+    weak var tenant: Person?
     deinit {
         println("Apartment #\(number) is being deinitialized")
     }
@@ -44,3 +44,34 @@ var john: Person?
 var number73: Apartment?
 john = Person(name: "John Appleseed")
 number73 = Apartment(number: 73)
+
+john!.apartment = number73
+number73!.tenant = john
+
+john = nil
+number73 = nil
+
+class Customer {
+    let name: String
+    var card: CreditCard?
+    init(name: String) {
+        self.name = name
+    }
+    deinit { println("\(name) is being deinitialized") }
+}
+
+class CreditCard {
+    let number: UInt64
+    unowned let customer: Customer
+    init(number: UInt64, customer: Customer) {
+        self.number = number
+        self.customer = customer
+    }
+    deinit { println("Card #\(number) is being deinitialized") }
+}
+
+var juan: Customer?
+juan = Customer(name: "John Appleseed")
+juan!.card = CreditCard(number: 1234_5678_9012_3456, customer: juan!)
+john = nil
+
