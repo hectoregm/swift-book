@@ -105,3 +105,43 @@ if let firstRoomName = john.residence?[0].name {
 } else {
     println("Unable to retrieve the first room name.")
 }
+
+var testScores = ["Dave": [86, 82, 84], "Bev": [79, 94, 81]]
+testScores["Dave"]?[0] = 91
+testScores["Bev"]?[0]++
+testScores["Brian"]?[0] = 72
+testScores
+
+// Linking Multiple Levels of Chaining
+john
+john.residence
+if let johnsStreet = john.residence?.address?.street {
+    println("John's street name is \(johnsStreet).")
+} else {
+    println("Unable to retrieve the address.")
+}
+let johnsAddress = Address()
+johnsAddress.buildingName = "The Larches"
+johnsAddress.street = "Laurel Street"
+john.residence!.address = johnsAddress
+
+if let johnsStreet = john.residence?.address?.street {
+    println("John's street name is \(johnsStreet).")
+} else {
+    println("Unable to retrieve the address.")
+}
+
+
+// Chaining on Methods with Optional Return Values
+
+if let buildingIdentifier = john.residence?.address?.buildingIdentifier() {
+    println("John's building identifier is \(buildingIdentifier).")
+}
+
+if let beginsWithThe = john.residence?.address?.buildingIdentifier()?.hasPrefix("The") {
+    if beginsWithThe {
+        println("John's building identifier begins with \"The\".")
+    } else {
+        println("John's building identifier does not begin with \"The\".")
+    }
+}
