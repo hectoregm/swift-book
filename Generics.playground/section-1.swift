@@ -33,16 +33,6 @@ println("someString is now \(someString), and anotherString is now \(anotherStri
 
 // Generic Types
 
-struct IntStack {
-    var items = [Int]()
-    mutating func push(item: Int) {
-        items.append(item)
-    }
-    mutating func pop() -> Int {
-        return items.removeLast()
-    }
-}
-
 struct Stack<T> {
     var items = [T]()
     mutating func push(item: T) {
@@ -105,4 +95,71 @@ protocol Container {
     typealias ItemType
     mutating func append(item: ItemType)
     var count: Int { get }
+    subscript(i: Int) -> ItemType { get }
+}
+
+struct IntStack: Container {
+    var items = [Int]()
+    mutating func push(item: Int) {
+        items.append(item)
+    }
+    mutating func pop() -> Int {
+        return items.removeLast()
+    }
+    
+    //typealias ItemType = Int
+    mutating func append(item: Int) {
+        self.push(item)
+    }
+    var count: Int {
+        return items.count
+    }
+    subscript(i: Int) -> Int {
+        return items[i]
+    }
+}
+
+extension Stack: Container {
+    mutating func append(item: T) {
+        self.push(item)
+    }
+    var count: Int {
+        return items.count
+    }
+    subscript(i: Int) -> T {
+        return items[i]
+    }
+}
+
+extension Array: Container {}
+
+// Where Clauses
+
+func allItemsMatch<
+    C1: Container, C2: Container
+    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable>
+    (someContainer: C1, anotherContainer: C2) -> Bool {
+        if someContainer.count != anotherContainer.count {
+            return false
+        }
+        
+        for i in 0..<someContainer.count {
+            if someContainer[i] != anotherContainer[i] {
+                return false
+            }
+        }
+        
+        return true
+}
+stackOfStrings = Stack<String>()
+stackOfStrings.push("uno")
+stackOfStrings.push("dos")
+stackOfStrings.push("tres")
+
+var arrayOfStrings = ["uno", "dos", "tres"]
+
+if allItemsMatch(stackOfStrings, arrayOfStrings) {
+    println("All items match.")
+} else {
+    println("Not all items match")
 }
